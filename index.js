@@ -39,6 +39,26 @@ app.get("/products/:id" , async(req, res) =>{
     console.log(result);
     res.send(result)
 })
+// update 
+app.put("/products/:id" , async(req, res) =>{
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id)}
+  const option = {upsert : true};
+  const  updateProduct = req.body;
+  const product = {
+    $set:{
+      image: updateProduct.image,
+      name: updateProduct.name,
+      brand: updateProduct.brand,
+      category: updateProduct.category,
+      price: updateProduct.price,
+      rating: updateProduct.rating,
+                                                                                             
+    }
+  } 
+  const result = await productsCollection.updateOne(filter, product, option)
+  res.send(result)
+})
 app.get("/products", async (req, res) =>{
   const cursor = productsCollection.find();
   const result = await cursor.toArray()
@@ -49,6 +69,8 @@ app.post("/products" , async (req, res) =>{
  const result = await productsCollection.insertOne(product)
  res.send(result)
 })
+/
+
 
 // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
